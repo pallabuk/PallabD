@@ -1,3 +1,8 @@
+//Test Objective: To Verify whether application allows admin to Add New Feature in the application
+//Test Case Name: RETC_027
+
+
+
 package com.training.sanity.tests;
 
 import java.io.FileInputStream;
@@ -6,9 +11,6 @@ import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -17,6 +19,7 @@ import org.testng.annotations.Test;
 
 import com.training.generics.ScreenShot;
 import com.training.pom.LoginPOM;
+import com.training.pom.PropertiesPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
@@ -25,6 +28,7 @@ public class RETC027Tests {
 	public WebDriver driver;
 	public String baseUrl;
 	public LoginPOM loginPOM;
+	public PropertiesPOM propertiesPOM;
 	public static Properties properties;
 	public ScreenShot screenShot;
 
@@ -40,7 +44,8 @@ public class RETC027Tests {
 	@BeforeMethod
 	public void setUp() throws Exception {
 		driver = DriverFactory.getDriver(DriverNames.CHROME);
-		loginPOM = new LoginPOM(driver); 
+		loginPOM = new LoginPOM(driver);
+		propertiesPOM = new PropertiesPOM(driver);
 		baseUrl = properties.getProperty("baseURL");
 		screenShot = new ScreenShot(driver); 
 		// open the browser 
@@ -54,25 +59,22 @@ public class RETC027Tests {
 	}
 	@Test
 	public void validLoginTest() throws InterruptedException {
-		loginPOM.sendUserName("pallabuk1@gmail.com");
+		loginPOM.sendUserName("pallabuk1@gmail.com");  
 		loginPOM.sendPassword("password@12345");
 		loginPOM.clickLoginBtn(); 
-		screenShot.captureScreenShot("First");
-		WebElement property=driver.findElement(By.xpath("//div[contains(text(),'Properties')]"));
-	    Actions act=new Actions(driver);
-	    act.moveToElement(property).build().perform();
-	    //Thread.sleep(3000);
-        WebElement allproperty=driver.findElement(By.xpath("//a[contains(text(),'Features')]"));
-        act.moveToElement(allproperty).click().build().perform();
-        
-        driver.findElement(By.id("tag-name")).sendKeys("New Launches");
-        driver.findElement(By.id("tag-slug")).sendKeys("Launche");
-        driver.findElement(By.id("tag-description")).sendKeys("New Launches of vilas, apartments, flats");
-        driver.findElement(By.id("submit")).click();
-        String expectedResult="New Launches";
-        String actualResult=driver.findElement(By.xpath("//a[contains(text(),'New Launches')]")).getText();
+		Thread.sleep(3000);
+		propertiesPOM.hoverOnProperties();   				//Click on Properties link
+		propertiesPOM.clickOnFeatures();					//Click on Features link
+        propertiesPOM.sendFeatureName("New Launches152");	//Enter Valid Credentials in Name textbox
+        propertiesPOM.sendSlug("Launche152");				//Enter Valid Credentials in Slug textbox
+        propertiesPOM.sendDescription("New Launches of vilas, apartments, flats"); //Enter Valid Credentials in Description textbox
+        propertiesPOM.clickSubmitBtn();						//Click on Add New Feature button
+        propertiesPOM.sendFeatureSearch("New Launches152");
+        propertiesPOM.clickSearchFeatureBtn();
+        String expectedResult="New Launches152";
+        String actualResult=driver.findElement(By.xpath("//tr[@id='tag-1418']//td[1]//strong//a")).getText();
         Assert.assertEquals(actualResult, expectedResult);
-            
+	            
 	}
 }
 
