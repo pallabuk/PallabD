@@ -1,7 +1,4 @@
-//Test Objective: TO verify whether application allows admin to add post based on the created category
-//Test Case Name: RETC_039
-//Test Result: Passed
-
+//Test Objective: To verify whether application allows admin to add new category while adding new post & same getting displayed on home screen for user
 
 package com.training.sanity.tests;
 
@@ -11,8 +8,6 @@ import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -26,7 +21,8 @@ import com.training.pom.PropertiesPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class RETC039Tests {
+public class RETC_075 {
+
 	public WebDriver driver;
 	public String baseUrl;
 	public LoginPOM loginPOM;
@@ -59,30 +55,49 @@ public class RETC039Tests {
 	@AfterClass
 	public void tearDown() throws Exception {
 		Thread.sleep(1000);
-		driver.quit();
+		//driver.quit();
 	}
 	@Test
 	public void validLoginTest() throws InterruptedException {
 		loginPOM.sendUserName("pallabuk1@gmail.com");
 		loginPOM.sendPassword("password@12345");
 		loginPOM.clickLoginBtn(); 
-		screenShot.captureScreenShot("First");
-		postsPOM.hoverOnPosts();		//Click on Posts link
-		postsPOM.clickOnCategories();	//Click on Categories link
-		postsPOM.sendCategoryName("New Launches111");  	//Enter Valid Credentials in Name textbox
-		postsPOM.sendCatgSlug("Launches111");			//Enter Valid Credentials in Slug textbox
+		postsPOM.hoverOnPostsLink();		//Hover on Posts link
+		postsPOM.clickOnAddNewLink();       //Click on Add New link 
+		postsPOM.clickOnCategories();		//Click on Categories link
+		postsPOM.sendCategoryName("Plots101");  	//Enter Valid Credentials in Name textbox
+		Thread.sleep(1000);
+		postsPOM.sendCatgSlug("Plots");			//Enter Valid Credentials in Slug textbox
+		Thread.sleep(1000);
+		postsPOM.selectFromParentCategory();			// Select value from Parent Category list box
+		Thread.sleep(1000);
 		postsPOM.sendCatgDescription("New Launches of villas, apartments, flats");		//Enter Valid Credentials in Description textbox
 		postsPOM.clickSubmitBtn();		//Click on Add New Category button
-		postsPOM.sendSearchText("New Launches111");
-		postsPOM.clickSearchBtn();
 		Thread.sleep(1000);
+		postsPOM.refreshCurrentPage();  //refresh the page
+		postsPOM.scrollingPage();
+		postsPOM.sendSearchText("Plots101");
+		postsPOM.clickSearchBtn();
+		postsPOM.clickOnAddNewLink();
+		postsPOM.enterTitle("vihar");			
+		postsPOM.sendParagraph();
+		postsPOM.clickCategoryCheckBox();
+		postsPOM.clickPublish();		// Click on Publish button
+		postsPOM.hoverOnProfile();
+		postsPOM.clickOnLogOut();		// Click on Logout
+		postsPOM.clickOnReatEstate();	// Click on Real Estate icon
+		postsPOM.sendSearchProperty("vihar");
+		postsPOM.clickOnVihar();		
+		postsPOM.scrollingPage();
 		
 	    String expectedResult="New Launches111";
         String actualResult=driver.findElement(By.xpath("//tr[@id='tag-1418']//td[1]//strong//a")).getText();
         Assert.assertEquals(actualResult, expectedResult);
+        screenShot.captureScreenShot("RETC_075");
             
 	}
 }
+
 
 
 

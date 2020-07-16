@@ -1,6 +1,8 @@
 package com.training.pom;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -37,7 +39,8 @@ private WebDriver driver;
 	@FindBy(id = "tag-search-input")
 	private WebElement fsearch;
 	
-	@FindBy (xpath="//input[@type='submit' and @value='Search Features']")
+	//@FindBy (xpath="//input[@type='submit' and @value='Search Features']")
+	@FindBy (id = "search-submit")
 	 private WebElement searchbtn;
 	
 	public void sendFeatureSearch(String fsearch) {
@@ -45,8 +48,16 @@ private WebDriver driver;
 		this.fsearch.sendKeys(fsearch);
 		}
 	
-	public void clickSearchFeatureBtn() {
-		this.searchbtn.click();
+	public void clickSearchFeatureBtn() throws InterruptedException {
+		JavascriptExecutor js= (JavascriptExecutor)driver;
+		js.executeScript("window.scrollTo(0,-document.body.scrollHeight)");
+	//Thread.sleep(10000);
+		Actions act= new Actions(driver);
+		act.moveToElement(this.searchbtn).click().perform();
+		//act.sendKeys(Keys.ENTER);
+		act.sendKeys(Keys.ENTER);
+		//act.moveToElement(this.searchbtn).click().perform();
+//		this.searchbtn.click();
 	}
 	
 	public void clickOnApply() {

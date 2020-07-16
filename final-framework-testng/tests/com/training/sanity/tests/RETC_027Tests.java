@@ -1,6 +1,7 @@
-//Test Objective: TO Verify whether application allows admin to move properties details into trash.
-//Test Case Name: RETC_026
-//Test Result: Passed.
+//Test Objective: To Verify whether application allows admin to Add New Feature in the application
+//Test Case Name: RETC_027
+
+
 
 package com.training.sanity.tests;
 
@@ -10,9 +11,6 @@ import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -25,7 +23,8 @@ import com.training.pom.PropertiesPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class RETC026Tests {
+public class RETC_027Tests {
+
 	public WebDriver driver;
 	public String baseUrl;
 	public LoginPOM loginPOM;
@@ -60,22 +59,23 @@ public class RETC026Tests {
 	}
 	@Test
 	public void validLoginTest() throws InterruptedException {
-		loginPOM.sendUserName("pallabuk1@gmail.com");
+		loginPOM.sendUserName("pallabuk1@gmail.com");  
 		loginPOM.sendPassword("password@12345");
-		loginPOM.clickLoginBtn();
+		loginPOM.clickLoginBtn(); 
 		Thread.sleep(3000);
-		propertiesPOM.hoverOnProperties(); 			//Click on Properties link
-		propertiesPOM.clickOnAllProperties();		//Click on All Properties link
-        propertiesPOM.clickCheckBox(); 				//Click on the checkbox beside the Property details 
-		propertiesPOM.selectFromBulkActions();		//Click on Bulk Actions list box
-		propertiesPOM.clickOnApply();				//Click on Apply button
-		Thread.sleep(3000);
-        String expectedResult="1 post moved to the Trash. Undo";
-        String actualResult=driver.findElement(By.xpath("//p[contains(text(),'1 post moved to the Trash.')]")).getText();
+		propertiesPOM.hoverOnProperties();   				//Click on Properties link
+		propertiesPOM.clickOnFeatures();					//Click on Features link
+        propertiesPOM.sendFeatureName("New Launches152");	//Enter Valid Credentials in Name textbox
+        propertiesPOM.sendSlug("Launche152");				//Enter Valid Credentials in Slug textbox
+        propertiesPOM.sendDescription("New Launches of vilas, apartments, flats"); //Enter Valid Credentials in Description textbox
+        propertiesPOM.clickSubmitBtn();						//Click on Add New Feature button
+        propertiesPOM.sendFeatureSearch("New Launches152");
+        propertiesPOM.clickSearchFeatureBtn();
+        String expectedResult="New Launches152";
+        String actualResult=driver.findElement(By.xpath("//tr[@id='tag-1418']//td[1]//strong//a")).getText();
         Assert.assertEquals(actualResult, expectedResult);
-        screenShot.captureScreenShot("RETC026");
-            
+        screenShot.captureScreenShot("RETC027");
+	            
 	}
 }
-
 

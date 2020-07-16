@@ -1,6 +1,6 @@
-//Test Objective: The objective of this test is to verify whether application allows admin to filter properties details based on the search criteria
-//Test Case Name: RETC_025
-//Test Result: Passed
+//Test Objective: TO Verify whether application allows admin to move properties details into trash.
+//Test Case Name: RETC_026
+//Test Result: Passed.
 
 package com.training.sanity.tests;
 
@@ -25,7 +25,7 @@ import com.training.pom.PropertiesPOM;
 import com.training.utility.DriverFactory;
 import com.training.utility.DriverNames;
 
-public class RETC025Tests {
+public class RETC_026Tests {
 	public WebDriver driver;
 	public String baseUrl;
 	public LoginPOM loginPOM;
@@ -40,11 +40,13 @@ public class RETC025Tests {
 		properties.load(inStream);
 	}
 	
+		
+
 	@BeforeMethod
 	public void setUp() throws Exception {
 		driver = DriverFactory.getDriver(DriverNames.CHROME);
-		loginPOM = new LoginPOM(driver); 
-	    propertiesPOM = new PropertiesPOM(driver);
+		loginPOM = new LoginPOM(driver);
+		propertiesPOM = new PropertiesPOM(driver);
 		baseUrl = properties.getProperty("baseURL");
 		screenShot = new ScreenShot(driver); 
 		// open the browser 
@@ -58,23 +60,22 @@ public class RETC025Tests {
 	}
 	@Test
 	public void validLoginTest() throws InterruptedException {
-		loginPOM.sendUserName("pallabuk1@gmail.com");       //Enter valid credentials in UserName textbox
-		loginPOM.sendPassword("password@12345");    		//Enter valid credentials in password textbox
-		loginPOM.clickLoginBtn();    						//Click on Sign in Button
+		loginPOM.sendUserName("pallabuk1@gmail.com");
+		loginPOM.sendPassword("password@12345");
+		loginPOM.clickLoginBtn();
 		Thread.sleep(3000);
-		propertiesPOM.hoverOnProperties();    				//Click on Properties link
-		propertiesPOM.clickOnAllProperties();   			//Click on All Properties link
+		propertiesPOM.hoverOnProperties(); 			//Click on Properties link
+		propertiesPOM.clickOnAllProperties();		//Click on All Properties link
+        propertiesPOM.clickCheckBox(); 				//Click on the checkbox beside the Property details 
+		propertiesPOM.selectFromBulkActions();		//Click on Bulk Actions list box
+		propertiesPOM.clickOnApply();				//Click on Apply button
 		Thread.sleep(3000);
-		propertiesPOM.selectFromAllDatea();    				//Click and select valid credentials in All Dates list box  
-		Thread.sleep(3000);
-		propertiesPOM.clickFilterBtn();    					//Click on Filter button
-		Thread.sleep(3000);
-		String expectedResult="Published";    				//To validate the actual result with the expected.
-        String actualResult=driver.findElement(By.xpath("//table[@class='wp-list-table widefat fixed striped posts']/tbody/tr[1]/td[4]")).getText();
-        Boolean actualtext = actualResult.contains(expectedResult);
-        Assert.assertTrue(actualtext);
-        screenShot.captureScreenShot("RETC025");			//To capture the screenshot.
+        String expectedResult="1 post moved to the Trash. Undo";
+        String actualResult=driver.findElement(By.xpath("//p[contains(text(),'1 post moved to the Trash.')]")).getText();
+        Assert.assertEquals(actualResult, expectedResult);
+        screenShot.captureScreenShot("RETC026");
             
 	}
 }
+
 
